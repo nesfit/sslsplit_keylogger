@@ -1,0 +1,34 @@
+global
+    log 127.0.0.1   local0
+    log 127.0.0.1   local1 debug
+    maxconn 4096
+    daemon
+    #debug
+    #quiet
+
+defaults
+    log     global
+    mode    http
+    option forwardfor
+    #option http-server-close
+
+    timeout connect      5000
+    timeout client      50000
+    timeout server      50000
+    
+    stats enable
+    stats uri /stats
+    stats realm Haproxy\ Stats
+    stats auth user:pass
+
+frontend collector-http
+    bind *:80
+    reqadd X-Forwarded-Proto:\ http
+    default_backend collector-backend
+
+frontend collector-https
+    bind *:443 ssl crt /tmp/haproxy/keys/test.pem
+    reqadd X-Forwarded-Proto:\ https
+    default_backend collector-backend
+
+backend collector-backend

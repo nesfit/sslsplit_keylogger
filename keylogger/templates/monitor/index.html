@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Report Monitor</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2>Users</h2>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>First Seen</th>
+        <th>Last Seen</th>
+        <th>Last IP</th>
+        <th>User-Agent</th>
+        <th>Reports</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <tr data-objid="{{ str(user['_id']) }}">
+            <td>{{ str(user["reports"][0]["ts"]) }}</td>
+            <td>{{ str(user["reports"][-1]["ts"]) }}</td>
+            <td>{{ str(user["reports"][-1]["ip"]) }}</td>
+            <td>{{ escape(user["user_agent"]) }}</td>
+            <td><a href="{{ reverse_url('userDetail', str(user['_id'])) }}">{{ len(user["reports"]) }}</a></td>
+        </tr>
+    {% end %}
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

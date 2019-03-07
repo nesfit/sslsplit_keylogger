@@ -1,0 +1,16 @@
+# Clean docker instances
+sudo docker ps # lsit of active docker containers
+sudo docker stop <id>
+sudo docker rm <id>
+
+
+#HTTP logger run
+sudo docker run --name mongo -p 27017:27017 mongo:latest
+sudo docker build - < Dockerfile 
+sudo docker images
+sudo docker run -it -p 80:80 -p 443:443 -p 7000:7000 aa94c969d0b0 --workers_num=4 --hook_host=192.168.254.142 --db=192.168.254.142
+
+#Use Robomongo
+
+
+

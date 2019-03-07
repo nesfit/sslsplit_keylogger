@@ -2,6 +2,7 @@
 select 'drop table ' || name || ';' from sqlite_master where type = 'table';
 """
 
+"""
 from sqlalchemy import Column, String, Integer, ForeignKey, DateTime
 from sqlalchemy.orm import relationship, backref, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -141,3 +142,4 @@ class ReportCollector:
 
         return user, report
 
+"""

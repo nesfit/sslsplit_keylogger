@@ -4,6 +4,8 @@ todo:
     - 304
 """
 
+from sys import stdout
+
 from tornado.web import Application, RequestHandler
 from tornado.template import Template
 from tornado.httpserver import HTTPServer
@@ -13,6 +15,10 @@ from json import loads
 from jsmin import jsmin
 
 from report_collector import ReportCollector
+
+def debug_log(str):
+    print(str)
+    stdout.flush()
 
 class CollectorApp(Application):
     def __init__(self, args):
@@ -45,10 +51,9 @@ class BaseRequestHandler(RequestHandler):
     def get_remote_ip(self):
         return self.request.headers.get("X-Forwarded-For", self.request.remote_ip)
 
-
 class HookHandler(BaseRequestHandler):
     def get(self):
-        print("Serving hook to %s" % self.get_remote_ip())
+        debug_log("Serving hook to %s" % self.get_remote_ip())
         self.set_header("Content-Type", 'text/javascript; charset="utf-8"')
         protocol = self.request.headers.get("X-Forwarded-Proto")
         if protocol == "https":
@@ -71,12 +76,10 @@ class ReportHandler(BaseRequestHandler):
 
     @tornado_coroutine
     def post(self):
-        print("Receiving report from %s" % self.get_remote_ip())
-
+        debug_log("Receiving report from %s" % self.get_remote_ip())
         report = loads(self.request.body)
         yield self.application.report_collector.save(report, self)
 
         self.finish({
             "msg": "thank you for your cooperation"
         })
-

@@ -19,7 +19,7 @@ def spawn_worker(args, worker_id, port):
     print("Starting Collector Server worker %d at port %s" % (worker_id, port))
     
     http_server = HTTPServer(CollectorApp(args))
-    http_server.listen(port, address="localhost")
+    http_server.listen(port, address="127.0.0.1")
     try:
         IOLoop.instance().start()
     except KeyboardInterrupt:
@@ -29,7 +29,7 @@ def spawn_monitor(args):
     print("Starting Monitor Server at port %d" % args.monitor_port)
 
     http_server = HTTPServer(MonitorApp(args))
-    http_server.listen(args.monitor_port, address="localhost")
+    http_server.listen(args.monitor_port, address="127.0.0.1")
     try:
         IOLoop.instance().start()
     except KeyboardInterrupt:
@@ -52,6 +52,9 @@ def main():
     if not isfile(args.haproxy_config):
         raise "Invalid HAProxy config file"
 
+    if args.workers_num == 0:
+        raise "No workers specified"
+
     # Create collector workers and prepare HAProxy config
     haproxy_config_file = open(args.haproxy_config, "a")
     workers = []
@@ -62,8 +65,9 @@ def main():
         workers.append(w)
         w.start()
 
-        # Create HAProxy backend server entry
+        # Create backend server entry in HAProxy config
         haproxy_config_file.write("\tserver collector%d localhost:%d check\n" % (i, w_port))
+    
     haproxy_config_file.close()
 
     # Run monitor server
@@ -71,6 +75,7 @@ def main():
     workers.append(w)
     w.start()
 
+    print("Starting HAProxy ...")
     # Run HAProxy
     sleep(0.5)
     haproxy_proc = Popen(["haproxy", "-f", args.haproxy_config]) 

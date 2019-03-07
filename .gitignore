@@ -1,1 +1,2 @@
-keylogger/*.pyc
+keyloggerServer/src/*.pyc
+keyloggerServer/src/.idea/

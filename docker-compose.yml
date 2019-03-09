@@ -10,6 +10,7 @@ services:
     environment:
       - HOOK_HOST=$HOOK_HOST
       - HOOK_PORT_HTTP=$HOOK_PORT_HTTP
+      - HOOK_PORT_HTTPS=$HOOK_PORT_HTTPS
     command:
       -k key/ca.key  
       -c key/ca.crt 

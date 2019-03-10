@@ -21,8 +21,10 @@ services:
       -S log 
       -H "<script src='http://$HOOK_HOST:$HOOK_PORT_HTTP/hook' type='text/javascript'></script>" 
       -H "<script src='https://$HOOK_HOST:$HOOK_PORT_HTTPS/hook' type='text/javascript'></script>" 
-      tcp 0.0.0.0 8080
-      ssl 0.0.0.0 8443
+      https 0.0.0.0 8443 
+      http 0.0.0.0 8080
+      #tcp 0.0.0.0 8080
+      #ssl 0.0.0.0 8443
     network_mode: "host"
     volumes:
       - ./data:/data

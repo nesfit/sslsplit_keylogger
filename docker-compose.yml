@@ -12,15 +12,17 @@ services:
       - HOOK_PORT_HTTP=$HOOK_PORT_HTTP
       - HOOK_PORT_HTTPS=$HOOK_PORT_HTTPS
     command:
-      -k key/ca.key  
-      -c key/ca.crt 
+      -k /data/key/ca.key  
+      -c /data/key/ca.crt 
       -D 
-      -K key/ca.key
+      -K /data/key/ca.key
       -P
-      -l log/connections.log 
-      -S log 
+      -l /data/log/connections.log 
+      -S /data/log 
       -H "<script src='http://$HOOK_HOST:$HOOK_PORT_HTTP/hook' type='text/javascript'></script>" 
-      -H "<script src='https://$HOOK_HOST:$HOOK_PORT_HTTPS/hook' type='text/javascript'></script>" 
+      -H "<script src='https://$HOOK_HOST:$HOOK_PORT_HTTPS/hook' type='text/javascript'></script>"
+      -X /data/pcaps/$PCAP_FILE_NAME
+      -M /data/master_keys 
       https 0.0.0.0 8443 
       http 0.0.0.0 8080
     network_mode: "host"

@@ -80,6 +80,7 @@ $ docker-compose up -d
 ```bash
 # setup
 sysctl -w net.ipv4.ip_forward=1
+iptables -P FORWARD ACCEPT
 iptables -t nat -N SSLSPLIT
 iptables -t nat -A SSLSPLIT -p tcp --dport 80 -j REDIRECT --to-ports 8080
 iptables -t nat -A SSLSPLIT -p tcp --dport 443 -j REDIRECT --to-ports 8443

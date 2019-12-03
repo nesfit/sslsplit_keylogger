@@ -1,5 +1,5 @@
 # Web Keylogger
-Injection of hidden form and extraction of user's credentials if stored in browser.
+Injection of hidden form and extraction of user's credentials if stored in the browser.
 
 ## SSLSplit
 [SSLsplit][1] is a tool for man-in-the-middle attacks against SSL/TLS encrypted
@@ -103,7 +103,10 @@ curl -k https://www.messenger.com
 
 > ProTip: No warning dialog after importing `ca.crt` into system/browser.
 
-## read more
+## Demonstration
+- https://www.youtube.com/watch?v=kO2t3eZgG-8
+
+## Read more
 
 - <https://blog.heckel.xyz/2013/08/04/use-sslsplit-to-transparently-sniff-tls-ssl-connections/>
 
